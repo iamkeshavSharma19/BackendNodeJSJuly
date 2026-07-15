@@ -132,7 +132,26 @@ app.delete("/user", async (req, res) => {
   }
 });
 
-//&Updating the document === 
+//&Updating the document === findById and update query
+app.patch("/user", async (req, res) => {
+  
+  const userId = req.body.userId;
+  const data = req.body;
+  try {
+    const updateUser = await User.findByIdAndUpdate({ _id: userId }, data, {
+      returnDocument: "after",
+    });
+    res.status(200).json({
+      message: "User updated successfully",
+      data: updateUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong",
+      error,
+    });
+  }
+});
 
 connectDB()
   .then((res) => {
