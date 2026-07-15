@@ -76,6 +76,8 @@ app.get("/findOneUser", async (req, res) => {
     //~Suppose if the email is not present then It will basically give me an empty response.inside user null will be stored.
 
     //?If you donot pass emailId: userEMail inside User.findOne({}),then mongoDB will return the first document present in the collection.But it is not sure,docs also use arbitrary word here.
+
+    //^If the 2 users are having the same emailId then It will return the first matched document.
     const user = await User.findOne({ emailId: userEmail }).exec();
     // console.log(user);
     if (!user) {
