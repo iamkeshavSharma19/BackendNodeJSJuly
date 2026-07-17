@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config({ quiet: true });
 import express from "express";
 import { connectDB } from "./config/database.js";
-import { User } from "./models/user.TillMongooseModelsAndSchema.js";
+import { User } from "./models/user.js";
 
 const app = express();
 const PORT = process.env.PORT || 8888;
@@ -133,17 +133,26 @@ app.delete("/user", async (req, res) => {
 });
 
 //&Updating the document === findById and update query
-app.patch("/user", async (req, res) => {
-  
-  const userId = req.body.userId;
+app.patch("/user/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  console.log(userId);
   const data = req.body;
+  console.log(data);
   try {
-    const updateUser = await User.findByIdAndUpdate({ _id: userId }, data, {
+    const updatedUser = await User.findByIdAndUpdate({ _id: userId }, data, {
       returnDocument: "after",
+      //&this will now run the validator function whenever the update method will be called.I have to explicitly allow the runValidators.if i know pass gender as "hello",it will basically say === "Something Went Wrong".Because it failed inside the try block and it went to the catch block.
+      runValidators: true,
     });
+    if (!updatedUser) {
+      return res.status(404).json({
+        message: "Unable to update the user",
+        data: updatedUser,
+      });
+    }
     res.status(200).json({
       message: "User updated successfully",
-      data: updateUser,
+      data: updatedUser,
     });
   } catch (error) {
     res.status(500).json({

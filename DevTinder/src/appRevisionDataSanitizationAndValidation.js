@@ -1,6 +1,8 @@
+import dotenv from "dotenv";
+dotenv.config({ quiet: true });
 import express from "express";
 import { connectDB } from "./config/database.js";
-import { User } from "./models/user.js";
+import { User } from "./models/userTillDataSanitizationAndValidation.js";
 
 const app = express();
 
