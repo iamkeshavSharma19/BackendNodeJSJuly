@@ -134,11 +134,27 @@ app.delete("/user", async (req, res) => {
 
 //&Updating the document === findById and update query
 app.patch("/user/:userId", async (req, res) => {
-  const userId = req.params.userId;
+  const userId = req.params?.userId;
   console.log(userId);
   const data = req.body;
   console.log(data);
+  //?These below are the only things I want that the user should be able to change.
+  const ALLOWED_UPDATES = ["photoUrl", "about", "gender", "age", "skills"];
+  console.log(ALLOWED_UPDATES);
   try {
+    const isUpdateAllowed = Object.keys(data).every((k) =>
+      ALLOWED_UPDATES.includes(k),
+    );
+    console.log(isUpdateAllowed);
+    if (!isUpdateAllowed) {
+      return res.status(400).json({
+        message: "Update Not Allowed",
+      });
+    }
+
+    if (data?.skills.length > 10) {
+      throw new Error("Skills cannot be more than 10");
+    }
     const updatedUser = await User.findByIdAndUpdate({ _id: userId }, data, {
       returnDocument: "after",
       //&this will now run the validator function whenever the update method will be called.I have to explicitly allow the runValidators.if i know pass gender as "hello",it will basically say === "Something Went Wrong".Because it failed inside the try block and it went to the catch block.

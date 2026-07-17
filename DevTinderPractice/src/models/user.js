@@ -1,43 +1,72 @@
 import mongoose from "mongoose";
 import validator from "validator";
 
-const userSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    minLength: 4,
-    maxLength: 50,
-    required: true,
-  },
-  lastName: {
-    type: String,
-    minLength: 4,
-    maxLength: 30,
-  },
-  password: {
-    type: String,
-    required: true,
-    validate(value) {
-      if (!validator.isStrongPassword(value)) {
-        throw new Error("Enter a Strong Password: " + value);
-      }
+const userSchema = new mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      minLength: [4, "Username should be atleast of the 4 characters"],
+      maxLength: [50, "Username cannot exceed the 50 Characters"],
+      required: [true, "Please provide the username"],
+    },
+    lastName: {
+      type: String,
+      minLength: [4, "Last Name should be minimum of the 4 characters"],
+      maxLength: [30, "Last Name cannot exceed the 30 characters"],
+    },
+    password: {
+      type: String,
+      required: [true, "Please Enter the password"],
+      validate(value) {
+        if (!validator.isStrongPassword(value)) {
+          throw new Error("Enter a Strong Password: " + value);
+        }
+      },
+    },
+    age: {
+      type: Number,
+      min: [18, "User Age should be minimum of the 18 years"],
+    },
+    gender: {
+      type: String,
+      validate(value) {
+        if (!["male", "female", "others"].includes(value)) {
+          throw new Error("Gender data is not valid");
+        }
+      },
+    },
+    emailId: {
+      type: String,
+      lowercase: true,
+      required: [true, "Please Provide the email Address"],
+      unique: true,
+      trim: true,
+      validate(value) {
+        if (!validator.isEmail(value)) {
+          throw new Error("Invalid email address" + value);
+        }
+      },
+    },
+
+    photoUrl: {
+      type: String,
+      default: "https://geographyandyou.com/images/user-profile.png",
+      validate(value) {
+        if (!validator.isURL(value)) {
+          throw new Error("Invalid Photo URL: ", +value);
+        }
+      },
+    },
+
+    about: {
+      type: String,
+      default: "This is a default description about the user",
+    },
+    skills: {
+      type: [String],
     },
   },
-  age: {
-    type: Number,
-    min: 18,
-  },
-  gender: {
-    type: String,
-    validate(value) {
-      console.log("Validator Called:", value);
-      if (!["male", "female", "others"].includes(value)) {
-        throw new Error("Gender data is not valid");
-      }
-    },
-  },
-  emailId: {
-    type: String,
-  },
-});
+  { timestamps: true },
+);
 
 export const User = mongoose.model("User", userSchema);
