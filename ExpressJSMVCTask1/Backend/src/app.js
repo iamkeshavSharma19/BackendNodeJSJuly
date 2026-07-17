@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import cors from "cors";
 dotenv.config({ quiet: true });
 import express from "express";
 import { connectDB } from "./config/database.js";
@@ -7,6 +8,7 @@ import bookRoutes from "./routes/book-routes.js";
 const PORT = process.env.PORT || 9999;
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use("/api/v1", bookRoutes);
 
