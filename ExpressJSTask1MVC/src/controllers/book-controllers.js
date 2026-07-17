@@ -73,10 +73,19 @@ export const handleGetAllBooks = async (req, res) => {
 export const handleDeleteBook = async (req, res) => {
   try {
     const bookId = req.params.id;
-    const bookToBeDeleted = Book.findByIdAndDelete({ _id: bookId });
+
+    const bookToBeDeleted = await Book.findByIdAndDelete({ _id: bookId });
+
     if (!bookToBeDeleted) {
-      return res.status
+      return res.status(404).json({
+        message: "Not able to delete the book",
+        book: bookToBeDeleted,
+      });
     }
+    res.status(200).json({
+      message: "Book deleted successfully",
+      bookDeleted: bookToBeDeleted,
+    });
   } catch (error) {
     res.status(500).json({
       message: "Something went wrong",
@@ -85,6 +94,49 @@ export const handleDeleteBook = async (req, res) => {
   }
 };
 
-export const handleEditBook = async (req, res) => {};
+export const handleEditBook = async (req, res) => {
+  try {
+    const bookId = req.params.id;
+    const updatedData = req.body;
+    const bookToBeUpdated = await Book.findByIdAndUpdate(
+      { _id: bookId },
+      updatedData,
+      { returnDocument: "after" },
+    );
+    if (!bookToBeUpdated) {
+      return res.status(404).json({
+        message: "Not able to update the book",
+        bookToBeUpdated,
+      });
+    }
+    res.status(200).json({
+      message: "Book Updated Successfully",
+      bookToBeUpdated,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong",
+      error,
+    });
+  }
+};
 
-export const handleDeleteAllBooks = async (req, res) => {};
+export const handleDeleteAllBooks = async (req, res) => {
+  try {
+    const data = await Book.deleteMany({});
+
+    if (!data.acknowledged) {
+      return res.status(400).json({
+        message: "Unable to delete all books",
+      });
+    }
+
+    res.status(200).json({
+      message: "All Books deleted",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong",
+    });
+  }
+};
