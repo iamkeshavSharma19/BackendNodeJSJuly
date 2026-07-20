@@ -2,9 +2,13 @@ import dotenv from "dotenv";
 dotenv.config({ quiet: true });
 import express from "express";
 import { connectDB } from "./config/database.js";
+import appRouter from "./routes/wrestler-routes.js";
 
 const PORT = process.env.PORT || 6666;
 const app = express();
+
+app.use(express.json());
+app.use("/api/v1", appRouter);
 
 connectDB()
   .then(() => {
