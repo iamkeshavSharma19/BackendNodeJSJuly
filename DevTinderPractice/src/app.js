@@ -3,6 +3,8 @@ dotenv.config({ quiet: true });
 import express from "express";
 import { connectDB } from "./config/database.js";
 import { User } from "./models/user.js";
+import { validateSignUpData } from "./utils/validation.js";
+import bcrypt from "bcrypt";
 
 const app = express();
 const PORT = process.env.PORT || 8888;
@@ -14,7 +16,16 @@ app.post("/signup", async (req, res) => {
   //   const user = new User(req.body);
   try {
     //?Our Utility function for validating the Data
-    const user = new User(req.body);
+    validateSignUpData(req);
+    const { firstName, lastName, emailId, password } = req.body;
+    //?Hashing our Passwords
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({
+      firstName,
+      lastName,
+      emailId,
+      password: hashedPassword,
+    });
     await user.save();
     res.status(201).json({
       message: "User signed up successfully",
@@ -28,8 +39,48 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+//?Login API
+app.post("/login", async (req, res) => {
+  try {
+    if (!req.body) {
+      throw new Error("Please enter all your details");
+    }
 
+    const { emailId, password } = req.body;
 
+    if (!emailId || !password) {
+      throw new Error("Either emailId is missing or password is missing");
+    }
+    //?see whether the user exists in the database or not through his emailId.
+    const existingUser = await User.findOne({ emailId: emailId });
+    if (!existingUser) {
+      return res.status(401).json({
+        message: "Incorrect Email",
+      });
+    }
+    //?Comparing the password
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingUser.password,
+    );
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        message: "Incorrect Password",
+      });
+    }
+
+    res.status(200).json({
+      message: "User Logged In Successfully",
+      user: existingUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something Went Wrong",
+      error: error.message,
+    });
+  }
+});
 
 //?Reading the data from the database
 //*Creating an api to find only one user from the database
