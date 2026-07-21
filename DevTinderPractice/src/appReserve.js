@@ -3,6 +3,8 @@ dotenv.config({ quiet: true });
 import express from "express";
 import { connectDB } from "./config/database.js";
 import { User } from "./models/user.js";
+import { validateSignUpData } from "./utils/validation.js";
+import bcrypt from "bcrypt";
 
 const app = express();
 const PORT = process.env.PORT || 8888;
@@ -14,7 +16,18 @@ app.post("/signup", async (req, res) => {
   //   const user = new User(req.body);
   try {
     //?Our Utility function for validating the Data
-    const user = new User(req.body);
+    validateSignUpData(req);
+    const { firstName, lastName, emailId, password } = req.body;
+
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    const user = new User({
+      firstName,
+      lastName,
+      emailId,
+      password: passwordHash,
+    });
+
     await user.save();
     res.status(201).json({
       message: "User signed up successfully",
@@ -28,8 +41,42 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+//?Login API
+app.post("/login", async (req, res) => {
+  //?first of all I will extract my emailId and password from this req.body
+  try {
+    console.log(req.body);
+    if (!req.body) {
+      throw new Error("Email And Password is Missing");
+    }
+    const { emailId, password } = req.body;
+    if (!emailId || !password) {
+      throw new Error("Please enter both your email as well as the Password");
+    }
+    const user = await User.findOne({ emailId: emailId });
 
+    if (!user) {
+      throw new Error("Invalid credentials");
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
+    if (isPasswordValid) {
+      res.status(200).json({
+        message: "Login Successful!!",
+        loggedInUser: user,
+      });
+    } else {
+      res.status(400).json({
+        message: "Password is incorrect",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong",
+      error: error.message,
+    });
+  }
+});
 
 //?Reading the data from the database
 //*Creating an api to find only one user from the database
