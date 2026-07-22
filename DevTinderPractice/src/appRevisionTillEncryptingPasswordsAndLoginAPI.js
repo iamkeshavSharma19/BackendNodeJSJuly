@@ -5,14 +5,12 @@ import { connectDB } from "./config/database.js";
 import { User } from "./models/user.js";
 import { validateSignUpData } from "./utils/validation.js";
 import bcrypt from "bcrypt";
-import cookieParser from "cookie-parser";
-import jwt from "jsonwebtoken";
+
 const app = express();
 const PORT = process.env.PORT || 8888;
 
 //&This middleware is used for parsing the JSON data into the simple JS object
 app.use(express.json());
-app.use(cookieParser());
 
 app.post("/signup", async (req, res) => {
   //   const user = new User(req.body);
@@ -71,16 +69,7 @@ app.post("/login", async (req, res) => {
         message: "Incorrect Password",
       });
     }
-    //?If my both email as well as the password is validdated then here I will write the whole logic about the cookie and the JWT Token.
-    const token = jwt.sign(
-      {
-        _id: user._id,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1d",
-      },
-    );
+
     res.status(200).json({
       message: "User Logged In Successfully",
       user: existingUser,
