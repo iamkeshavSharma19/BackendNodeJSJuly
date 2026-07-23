@@ -14,7 +14,9 @@ import requestRouter from "./routes/requests.js";
 const app = express();
 const PORT = process.env.PORT || 8888;
 
-//&This middleware is used for parsing the JSON data into the simple JS object
+//?Finally the time has come to send the connection request.
+
+
 app.use(express.json());
 app.use(cookieParser());
 

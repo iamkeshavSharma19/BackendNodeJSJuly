@@ -40,6 +40,8 @@ const connectionRequestSchema = new mongoose.Schema(
   },
 );
 
+//&Meet again at the requests.js file.
+
 //?Creating Compound Indexes
 //&Basically this 1 over here means the ascending order and -1 means the descending order.
 connectionRequestSchema.index({ fromUserId: 1, toUserId: 1 });
