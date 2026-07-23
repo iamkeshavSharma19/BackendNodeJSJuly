@@ -71,10 +71,20 @@ const userSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-userSchema.methods.getJWT = async function () {
-  
+//?Creating here the mongoose Schema method for validating the Password
+userSchema.methods.validatePassword = async function (passwordInputByUser) {
   const user = this;
-  const token = await jwt.sign(
+  const passwordHash = user.password;
+  const isPasswordValid = await bcrypt.compare(
+    passwordInputByUser,
+    passwordHash,
+  );
+  return isPasswordValid;
+};
+
+userSchema.methods.getJWT = async function () {
+  const user = this;
+  const token = jwt.sign(
     {
       _id: user._id,
     },
@@ -85,19 +95,6 @@ userSchema.methods.getJWT = async function () {
   );
 
   return token;
-};
-
-userSchema.methods.validatePassword = async function (passwordInputByUser) {
-  
-  const user = this;
-  const passwordHash = user.password;
-
-  const isPassWordValid = await bcrypt.compare(
-    passwordInputByUser,
-    passwordHash,
-  );
-
-  return isPassWordValid;
 };
 
 export const User = mongoose.model("User", userSchema);

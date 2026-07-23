@@ -5,9 +5,9 @@ import { connectDB } from "./config/database.js";
 import { User } from "./models/user.js";
 import { validateSignUpData } from "./utils/validation.js";
 import bcrypt from "bcrypt";
-import cookieParser from "cookie-parser";
-import jwt from "jsonwebtoken";
 import { userAuth } from "./middlewares/auth.js";
+import cookieParser from "cookie-parser";
+
 const app = express();
 const PORT = process.env.PORT || 8888;
 
@@ -61,11 +61,8 @@ app.post("/login", async (req, res) => {
         message: "Incorrect Email",
       });
     }
-    //?Comparing the password
-    // const isPasswordValid = await bcrypt.compare(
-    //   password,
-    //   existingUser.password,
-    // );
+    //?Comparing the password ==> We will now basically offload this task to the mongoose Schema methods
+
     const isPasswordValid = await existingUser.validatePassword(password);
 
     if (!isPasswordValid) {
@@ -76,25 +73,16 @@ app.post("/login", async (req, res) => {
     //?If my both email as well as the password is validdated then here I will write the whole logic about the cookie and the JWT Token.
 
     //?Instead of signing the token over here, I can also get the token from my userSchema Method.
+    const token = await existingUser.getJWT();
+    console.log(token);
 
     //*I can just offload this jwt creation token logic to my handler method into my schema method and these are like helper methods only.
-    // const token = jwt.sign(
-    //   {
-    //     _id: user._id,
-    //   },
-    //   process.env.JWT_SECRET,
-    //   {
-    //     expiresIn: "1d",
-    //   },
-    // );
-    const token = await existingUser.getJWT();
+
     //?Step 2 ==> Adding this jwt token inside a cookie
     //?We will basically expire this cookie in the 8 hours
-
     res.cookie("token", token, {
       expires: new Date(Date.now() + 8 * 3600000),
     });
-
     res.status(200).json({
       message: "User Logged In Successfully",
       user: existingUser,
@@ -111,26 +99,47 @@ app.post("/login", async (req, res) => {
 app.get("/profile", userAuth, async (req, res) => {
   try {
     const user = req.user;
+    if (!user) {
+      return res.status(404).json({
+        message: "Not able to fetch the User's Profile",
+        user,
+      });
+    }
     res.status(200).json({
-      message: `${user.firstName + user.lastName} profile fetched successfully`,
-      userProfile: user,
+      message: `${user.firstName + " " + user.lastName + " "}'s Profile fetched Successfully`,
+      user,
     });
   } catch (error) {
     res.status(500).json({
-      message: "Something went wrong",
+      message: "Something Went Wrong",
       error: error.message,
     });
   }
 });
 
+//?Sending Connection Request
 app.post("/sendConnectionRequest", userAuth, async (req, res) => {
-  const user = req.user;
-
-  res.status(200).json({
-    message: `${user.firstName} sent the connection request`,
-    user,
-  });
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(404).json({
+        message: "Unable to find the User",
+        user,
+      });
+    }
+    const { firstName, lastName } = user;
+    res.status(200).json({
+      message: `${firstName + " " + lastName + " "}sent the coonnection Request`,
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something Went Wrong",
+      error: error.message,
+    });
+  }
 });
+
 connectDB()
   .then((res) => {
     console.log("Database connection established");
