@@ -25,3 +25,23 @@ export const validateSignUpData = (req) => {
     throw new Error("Please enter a strong Password");
   }
 };
+
+export const validateEditProfileData = (req) => {
+  //?In this req, I donot want the user to edit everything.In my userSchema there are so many things, first of all let us check the allowedEditFields
+  const allowedEditFields = [
+    "firstName",
+    "lastName",
+    "emailId",
+    "photoUrl",
+    "gender",
+    "age",
+    "about",
+    "skills",
+  ];
+
+  const isEditAllowed = Object.keys(req.body).every((field) =>
+    allowedEditFields.includes(field),
+  );
+
+  return isEditAllowed;
+};
