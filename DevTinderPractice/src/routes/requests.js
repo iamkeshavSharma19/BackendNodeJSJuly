@@ -1,6 +1,6 @@
 import express, { Router } from "express";
 import { userAuth } from "../middlewares/auth.js";
-import { ConnectionRequestModel } from "../models/connectionRequests.js";
+import { ConnectionRequest } from "../models/connectionRequests.js";
 import { User } from "../models/user.js";
 
 const requestRouter = express.Router();
@@ -33,7 +33,21 @@ requestRouter.post(
         });
       }
 
-      const connectionRequest = new ConnectionRequestModel({
+      const existingConnectionRequest = await ConnectionRequest.findOne({
+        $or: [
+          { fromUserId: fromUserId, toUserId: toUserId },
+          { fromUserId: toUserId, toUserId: fromUserId },
+        ],
+      });
+
+      if (existingConnectionRequest) {
+        return res.status(400).json({
+          message: "Connection Request Already exists",
+          existingConnectionRequest,
+        });
+      }
+
+      const connectionRequest = new ConnectionRequest({
         fromUserId,
         toUserId,
         status,

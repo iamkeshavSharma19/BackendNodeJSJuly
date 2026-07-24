@@ -27,6 +27,9 @@ const connectionRequestSchema = new mongoose.Schema(
   },
 );
 
+//?Creating the compound Indexes
+connectionRequestSchema.index({ fromUserId: 1, toUserId: 1 });
+
 //?mongoose pre method.It is like a middleware
 connectionRequestSchema.pre("save", function () {
   const connectionRequest = this;
@@ -35,7 +38,7 @@ connectionRequestSchema.pre("save", function () {
   }
 });
 
-export const ConnectionRequestModel = new mongoose.model(
+export const ConnectionRequest = new mongoose.model(
   "ConnectionRequest",
   connectionRequestSchema,
 );
