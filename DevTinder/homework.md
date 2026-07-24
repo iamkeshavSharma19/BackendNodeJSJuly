@@ -86,3 +86,7 @@
 - Why do we need index in DB?
 - What are the advantages and disadvantages of creating indexes.
 - Read the article about Compound Indexes on the MongoDB offical documentation.
+
+# ep13 === ref, Populate & Thought process of writing api's
+
+- Write code with proper validations for POST /request/review/:status/:requestId
