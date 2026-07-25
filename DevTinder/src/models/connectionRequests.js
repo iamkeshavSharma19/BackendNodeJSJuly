@@ -16,6 +16,7 @@ const connectionRequestSchema = new mongoose.Schema(
 
     toUserId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
 
@@ -47,9 +48,9 @@ connectionRequestSchema.pre("save", function () {
   // next();
 });
 
-const ConnectionRequestModel = new mongoose.model(
+const ConnectionRequest = new mongoose.model(
   "ConnectionRequest",
   connectionRequestSchema,
 );
 
-export default ConnectionRequestModel;
+export default ConnectionRequest;

@@ -92,3 +92,4 @@
 - Write code with proper validations for POST /request/review/:status/:requestId
 - read more about ref and populate
 - Create GET /user/requests/received
+- Create GET GET /user/connections
