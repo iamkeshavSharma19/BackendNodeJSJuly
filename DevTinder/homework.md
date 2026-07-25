@@ -90,3 +90,5 @@
 # ep13 === ref, Populate & Thought process of writing api's
 
 - Write code with proper validations for POST /request/review/:status/:requestId
+- read more about ref and populate
+- Create GET /user/requests/received
