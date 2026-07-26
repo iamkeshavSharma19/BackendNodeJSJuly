@@ -59,9 +59,6 @@ authRouter.post("/login", async (req, res) => {
       });
     }
 
-    //?Generating the jwt token, this method I have also added in the Schema methods.
-    
-
     //?Validate the password through the bcrypt.compare method.It is written in the schema methods.
     const isPasswordValid = await existingUser.validatePassword(password);
 
@@ -71,6 +68,20 @@ authRouter.post("/login", async (req, res) => {
           "Incorrect Password. Please provide correct Password Credentials",
       });
     }
+
+    //?Generating the jwt token, this method I have also added in the Schema methods.
+    const token = await existingUser.getJWT();
+
+    //?After the jwt token has generated we have to embed this token inside a cookie.
+
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 8 * 3600000),
+    });
+
+    res.status(200).json({
+      message: "User LoggedIn Successfully",
+      user: existingUser,
+    });
   } catch (error) {
     res.status(500).json({
       message: "Something went wrong",
@@ -79,4 +90,21 @@ authRouter.post("/login", async (req, res) => {
   }
 });
 
+//?LogOut API
+authRouter.post("/logout", async (req, res) => {
+  try {
+    res.cookie("token", null, {
+      expires: new Date(Date.now()),
+    });
+
+    res.status(200).json({
+      message: "User Logged Out Successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong",
+      error: error.message,
+    });
+  }
+});
 export default authRouter;
