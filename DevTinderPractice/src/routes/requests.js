@@ -5,6 +5,7 @@ import { ConnectionRequest } from "../models/connectionRequests.js";
 
 const requestRouter = express.Router();
 
+//?Sending the connection request.
 requestRouter.post(
   "/request/send/:status/:toUserId",
   userAuth,
@@ -69,6 +70,55 @@ requestRouter.post(
     } catch (error) {
       res.status(500).json({
         message: "Something went wrong",
+        error: error.message,
+      });
+    }
+  },
+);
+
+//?Receiving the connection request
+requestRouter.post(
+  "/request/review/:status/:requestId",
+  userAuth,
+  async (req, res) => {
+    try {
+      const loggedInUser = req.user;
+      const { _id: toUserId } = loggedInUser;
+      const { status, requestId } = req.params;
+      const allowedStatus = ["accepted", "rejected"];
+
+      if (!allowedStatus.includes(status)) {
+        return res.status(400).json({
+          message: `Invalid Status type ${status}`,
+          status,
+        });
+      }
+
+      const connectionRequest = await ConnectionRequest.findOne({
+        _id: requestId,
+        //?Inside toUserId loggedIn user id should be there
+        toUserId: toUserId,
+        status: "interested",
+      });
+
+      if (!connectionRequest) {
+        return res.status(404).json({
+          message: "No Connection request exist",
+          connectionRequest,
+        });
+      }
+
+      connectionRequest.status = status;
+
+      await connectionRequest.save();
+
+      res.status(200).json({
+        message: `Connection request ${status}`,
+        connectionRequest,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Something Went Wrong",
         error: error.message,
       });
     }
