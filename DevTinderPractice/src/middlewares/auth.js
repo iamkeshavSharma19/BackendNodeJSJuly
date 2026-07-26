@@ -5,7 +5,7 @@ export const userAuth = async (req, res, next) => {
   const cookie = req.cookies;
 
   const { token } = cookie;
-  console.log(token);
+  
 
   if (!token) {
     return res.status(401).json({

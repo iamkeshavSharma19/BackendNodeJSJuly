@@ -1,7 +1,7 @@
-import express, { Router } from "express";
+import express from "express";
 import { userAuth } from "../middlewares/auth.js";
-import { ConnectionRequest } from "../models/connectionRequests.js";
 import { User } from "../models/user.js";
+import { ConnectionRequest } from "../models/connectionRequests.js";
 
 const requestRouter = express.Router();
 
@@ -10,25 +10,23 @@ requestRouter.post(
   userAuth,
   async (req, res) => {
     try {
-      const fromUserId = req.user._id;
-      const toUserId = req.params.toUserId;
-      const status = req.params.status;
-      //?Interested ==> right swipe
-      //?rejected ==> left swipe
-      const allowedStatus = ["ignored", "interested"];
+      //?for sending the connectionRequest to anybody, first of all the fromUser person should be the loggedIn User.
+      const loggedInUser = req.user;
+      const { _id: fromUserId } = loggedInUser;
+
+      const { status, toUserId } = req.params;
+      const allowedStatus = ["interested", "ignored"];
       if (!allowedStatus.includes(status)) {
         return res.status(400).json({
-          message: "invalid status type",
+          message: `Invalid connection request status type ${status}`,
           status,
         });
       }
-
       const toUser = await User.findById(toUserId);
 
       if (!toUser) {
         return res.status(404).json({
-          message:
-            "The User to whom you sent the connection request was not found",
+          message: "User Not Found.Sending Connection Request Failed",
           toUser,
         });
       }
@@ -42,15 +40,15 @@ requestRouter.post(
 
       if (existingConnectionRequest) {
         return res.status(400).json({
-          message: "Connection Request Already exists",
+          message: "Connection Request already exists",
           existingConnectionRequest,
         });
       }
 
       const connectionRequest = new ConnectionRequest({
-        fromUserId,
-        toUserId,
-        status,
+        fromUserId: fromUserId,
+        toUserId: toUserId,
+        status: status,
       });
 
       const data = await connectionRequest.save();
@@ -70,7 +68,7 @@ requestRouter.post(
       });
     } catch (error) {
       res.status(500).json({
-        message: "Something Went Wrong",
+        message: "Something went wrong",
         error: error.message,
       });
     }
