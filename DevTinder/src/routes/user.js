@@ -103,6 +103,9 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
 
 //^There is one more condition that Virat should not see his Card himself,Suppose If You are fetching all the users,let say there are 6 users on the platform,Virat should not see his card himself.So you have to write a MongoDB query in such a way that you have to exclude all such people,whom we donot want in the feed.Now this logic is a little Complex to write.Let me meet you inside the try Block.
 
+//todo ==> donot first of all focus on the pagination, skip and limit, focus on making the feed api without Pagination at first.below is the feed api without pagination
+
+//?These page=1 and limit=10 are optional,user might call just this "/feed".If the user is just calling "/feed".If the user is just calling "/feed",I will basically give him the first 10 users.If the user wants the second page.Either he should pass like this => "/feed?page=2".So I should give the page no.2 content.If the user is not passing the limit then also I will give him 10 users only.
 userRouter.get("/feed", userAuth, async (req, res) => {
   try {
     //?What are the cards that the user should not see??
@@ -117,6 +120,10 @@ userRouter.get("/feed", userAuth, async (req, res) => {
     //? Now let say Virat has rejected the connection request of the Rahul.Should Virat should again be shown to the Rahul?No Virat should not be shown again on the Rahul's Profile.
     //&Now let say Elon has accepted the connectionReq of the Rahul.Should Rahul see Elon back into the feed.No
     //?Basically If the entry has already been created inside the connectionRequest Collection,then those persons should not be able to see each other's Profile once again.
+    const page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) || 10;
+    limit = limit > 50 ? 50 : limit;
+    const skip = (page - 1) * limit;
     const loggedInUser = req.user;
     //*Now I will find all the connectionRequests that either I[loggedInuser] have sent or I have received because If I have sent a request to somebody,so I should not see that on the feed,and If I have received somebody's request,then I should'not see them also on the feed.
     //?firstOf all I donot need all that random data,I dont care about createdAt, status, updatedAt, _id.so basically there is a select function and you can select that what all data do you need from this data.I just need my fromUserId and toUserId.
@@ -125,6 +132,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
       $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],
       //?But here in the select these fromUserId and toUserId also looks ugly, let me now make the use of the populate.[just to show case, I am going to remove populate just uncomment it]
     }).select("fromUserId toUserId status");
+
     // .populate("fromUserId", ["firstName", "lastName"])
     // .populate("toUserId", ["firstName", "lastName"]);
     //!Now just think about that I have to generate the feed of Harry Potter.Harry should not see Ron, Virat and Brock Lesnar.All the people whome you have sent or all the people whom you have received,you should'not see them in the feed.
@@ -138,7 +146,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
       hideUsersFromFeed.add(req.toUserId.toString());
     });
 
-    console.log(hideUsersFromFeed); //?In my set I have 4 unique people now from whom I have to hide the loggedIn User's feed.
+    // console.log(hideUsersFromFeed); //?In my set I have 4 unique people now from whom I have to hide the loggedIn User's feed.
 
     //?Now for finding out the remaining users, I will basically write a reverse query kind of a thing.
     const users = await User.find({
@@ -152,15 +160,23 @@ userRouter.get("/feed", userAuth, async (req, res) => {
           },
         },
         {
-          //*second condition ==> I donot want all the people who are there in the hideUsersFromFeed, I also donot want my own card to be there, for this I also have to write a $and query over here.
+          //*second condition ==> I donot want all the people who are there in the hideUsersFromFeed, I also donot want my own card to be there, for this I also have to write a $and query over here.See I have written this $and to handle an important edge case that What if the loggedIn User is a brand new User.So If loggedIn User is a brand new User then he will not have any connection request received or pending then In that He must see all the profiles in his feed accept his own profile.
           _id: {
             $ne: loggedInUser._id,
           },
         },
       ],
-    });
+    })
+      .select(USER_SAFE_DATA)
+      .skip(skip)
+      .limit(limit);
 
-    res.send(connectionRequests);
+    res.status(200).json({
+      message: "All the feed of the user fetched successfully",
+      users,
+    });
+    //?My feed API has been built successfully,Now let us move on to the another portion of the feed API.Suppose My database has 1000's of users.Suppose I have 1000 users registered,So I donot want my feed api to send me the 999 records in the feed API.I basically donot want to get the 999 records for a new user.
+    //*We should basically add Pagination to our feed API.The API should only return me 10 Users at a Time.My API Should return me only 10 Users at a Time.We basically want to build a feature of Pagination over here.First of all let us discuss some theory about the Pagination.In the src create a new file pagination.js,Meet you there!.Meet you again at the top of feed API.
   } catch (error) {
     res.status(500).json({
       message: "Something Went Wrong",

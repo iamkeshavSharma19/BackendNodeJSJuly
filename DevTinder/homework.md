@@ -93,3 +93,8 @@
 - read more about ref and populate
 - Create GET /user/requests/received
 - Create GET GET /user/connections
+
+# ep14 === Building Feed API & Pagination
+
+- Logic for GET /feed API
+- Explore the $nin, $and, $ne and other queries
