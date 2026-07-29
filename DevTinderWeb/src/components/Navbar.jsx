@@ -1,8 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { Brain, Flame, Rocket, Search, UserPlus } from "lucide-react";
 import { NavItem } from "./NavItem";
-
 
 const Navbar = () => {
   return (
@@ -15,7 +15,7 @@ const Navbar = () => {
           </div>
           <Flame className="w-6 h-6 text-red-500 -ml-1.5" />
           <span className="font-jetbrains-mono text-xl font-bold tracking-tight bg-linear-to-r from-white to-slate-300 bg-clip-text text-transparent">
-            DevTinder
+            <Link to="/">DevTinder</Link>
           </span>
         </div>
 
@@ -31,7 +31,7 @@ const Navbar = () => {
         {/* Desktop Action Buttons */}
         <div className="flex items-center gap-2 sm:gap-3">
           <button className="text-xs sm:text-sm px-2.5 sm:px-4 py-1.5 sm:py-2 text-slate-200 hover:text-white hover:bg-slate-800 rounded-lg transition-colors cursor-pointer">
-            Login
+            <Link to="/login">Login</Link>
           </button>
           <button className="text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 bg-slate-900 border border-slate-700 hover:bg-slate-800 rounded-lg flex items-center gap-1.5 sm:gap-2 text-slate-100 transition-all shadow-sm cursor-pointer whitespace-nowrap">
             <UserPlus className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" />

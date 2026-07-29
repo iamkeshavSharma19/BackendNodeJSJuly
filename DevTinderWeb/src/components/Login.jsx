@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import loginBg from "../assets/loginBg.jpg";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 export default function Login() {
   const [emailId, setEmailId] = useState("Brock@gmail.com");
 
   const [password, setPassword] = useState("Brock@2468");
+  const dispatch = useDispatch();
 
   const handleLogin = async () => {
     //?here we will make an api call to our login backend api.We will be using axios for making an api call.
@@ -20,7 +23,9 @@ export default function Login() {
           withCredentials: true,
         },
       );
-      
+      //?Once we got the loggedIn user,we will add this loggedInUser to our Redux Store.
+      console.log(res);
+      dispatch(addUser(res.data.user));
     } catch (error) {
       console.log(error);
     }
