@@ -59,11 +59,11 @@ export default function TestimonialsSection() {
         {/* Header Section */}
         <div className="text-center max-w-3xl mx-auto">
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
-            <span>What </span>
-            <span className="bg-linear-to-r from-purple-400 via-indigo-400 to-pink-400 bg-clip-text text-transparent font-['JetBrains_Mono']">
+            <span className="font-jetbrains-mono">What </span>
+            <span className="bg-linear-to-r from-purple-400 via-indigo-400 to-pink-400 bg-clip-text text-transparent  font-jetbrains-mono">
               Developers
             </span>{" "}
-            <span>are saying</span>
+            <span className="font-jetbrains-mono">are saying</span>
           </h2>
         </div>
 
