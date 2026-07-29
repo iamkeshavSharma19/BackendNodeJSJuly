@@ -1,18 +1,15 @@
 import React from "react";
 
-const Footer = () => {
+export default function Footer() {
   return (
-    <>
-      <footer className="footer sm:footer-horizontal footer-center bg-base-200 text-base-content p-4 fixed bottom-0">
-        <aside>
-          <p>
-            Copyright © {new Date().getFullYear()} - All right reserved by ACME
-            Industries Ltd
-          </p>
-        </aside>
-      </footer>
-    </>
+    <footer className="w-full bg-[#020817] border-t border-slate-800/60 py-8 px-4 text-center space-y-4">
+      <p className="text-xs sm:text-sm text-slate-400 font-sans tracking-wide">
+        © {new Date().getFullYear()}{" "}
+        <span className="font-['JetBrains_Mono'] font-bold text-slate-300">
+          DevTinder
+        </span>
+        . All rights reserved.
+      </p>
+    </footer>
   );
-};
-
-export default Footer;
+}
