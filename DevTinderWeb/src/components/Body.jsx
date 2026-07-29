@@ -6,10 +6,10 @@ import Footer from "./Footer";
 const Body = () => {
   return (
     <div>
-      {/* <Navbar /> */}
+      <Navbar />
       {/* for rendering Children Routes, Use Outlet, All the children routes will be rendered inside the <Outlet/> component */}
       <Outlet />
-      <Footer />
+      
     </div>
   );
 };

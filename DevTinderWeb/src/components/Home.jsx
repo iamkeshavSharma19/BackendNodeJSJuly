@@ -7,6 +7,7 @@ import MentorsSection from "./MentorsSection";
 import FeaturesGridSection from "./FeaturesGridSection";
 import TestimonialsSection from "./TestimonialsSection";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 export default function Home() {
   return (
@@ -34,7 +35,7 @@ export default function Home() {
       `}</style>
 
       {/* Navigation Header */}
-      <Navbar />
+      {/* <Navbar /> */}
       <br />
 
       {/* Main Content (Hero) */}
@@ -111,6 +112,7 @@ export default function Home() {
       <MentorsSection />
       <FeaturesGridSection />
       <TestimonialsSection />
+      <Footer />
     </div>
   );
 }
