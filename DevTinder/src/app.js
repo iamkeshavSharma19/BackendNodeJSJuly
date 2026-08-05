@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 7777;
 //?Adding some more configurations inside the cors
 app.use(
   cors({
-    origin: "http://localhost:5174",
+    origin: "http://localhost:5173",
     credentials: true,
   }),
 );

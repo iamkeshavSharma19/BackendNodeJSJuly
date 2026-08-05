@@ -35,3 +35,5 @@ export const Column2Images = [
     alt: "Connected developer flow visualization",
   },
 ];
+
+export const BASE_URL = "http://localhost:7777";

@@ -3,18 +3,22 @@ import loginBg from "../assets/loginBg.jpg";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../utils/constants";
 
 export default function Login() {
   const [emailId, setEmailId] = useState("Brock@gmail.com");
 
   const [password, setPassword] = useState("Brock@2468");
   const dispatch = useDispatch();
+  //?After successful LoggingIn, we will navigate our user to the feed section
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     //?here we will make an api call to our login backend api.We will be using axios for making an api call.
     try {
       const res = await axios.post(
-        "http://localhost:7777/login",
+        BASE_URL + "/login",
         {
           emailId,
           password,
@@ -24,8 +28,9 @@ export default function Login() {
         },
       );
       //?Once we got the loggedIn user,we will add this loggedInUser to our Redux Store.
-      console.log(res);
+      
       dispatch(addUser(res.data.user));
+      navigate("/feed");
     } catch (error) {
       console.log(error);
     }
