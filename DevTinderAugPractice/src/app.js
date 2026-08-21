@@ -138,11 +138,24 @@ app.patch("/user/edit/:id", async (req, res) => {
   try {
     const { id: editId } = req.params;
     const updatedData = req.body;
+    const ALLOWED_UPDATES = ["photoUrl", "about", "gender", "age", "skills"];
+    const isUpdateAllowed = Object.keys(updatedData).every((k) => {
+      return ALLOWED_UPDATES.includes(k);
+    });
+    if (!isUpdateAllowed) {
+      throw new Error("Update Not Allowed");
+    }
+
+    if (!updatedData.skills && updatedData.skills.length > 10) {
+      throw new Error("Skills Cannot be more than 10");
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       { _id: editId },
       updatedData,
       {
         returnDocument: "after",
+        runValidators: true,
       },
     );
     if (!updatedUser) {
