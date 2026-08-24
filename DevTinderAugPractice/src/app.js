@@ -3,6 +3,7 @@ dotenv.config({ quiet: true });
 import express from "express";
 import { connectDB } from "./config/database.js";
 import { User } from "./models/user.js";
+import { validateSignUpData } from "./utils/validation.js";
 
 const PORT = process.env.PORT || 9999;
 const app = express();
@@ -25,7 +26,22 @@ app.post("/signup", async (req, res) => {
         message: "Unable To SignUp The User",
       });
     }
-    const user = new User(req.body);
+    validateSignUpData(req);
+    const { firstName, lastName, emailId, password } = req.body;
+
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    const user = new User({
+      firstName,
+      lastName,
+      emailId,
+      password: passwordHash,
+    });
+
+    if (user?.skills.length > 10) {
+      throw new Error("Skills Cannot Be More Than 10");
+    }
+
     await user.save();
     res.status(201).json({
       message: "User Signedup Successfully",
@@ -33,6 +49,53 @@ app.post("/signup", async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      message: "Something Went Wrong",
+      error: error.message,
+    });
+  }
+});
+
+//^Login API
+app.post("/login", async (req, res) => {
+  try {
+    if (!req.body) {
+      return res.status(400).json({
+        message:
+          "It is mandatory to provide both EmailId And Password.Both Of These Things are missing",
+      });
+    }
+    const { emailId, password } = req.body;
+
+    if (!emailId || !password) {
+      return res.status(400).json({
+        message: "Either EmailId is missing or Password is Missing",
+      });
+    }
+
+    const user = await User.findOne({ emailId });
+
+    if (!user) {
+      return res.status(401).json({
+        message:
+          "You Are Not Authorised To Login Because Your EmailId is incorrect",
+        user,
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        message:
+          "You are not authorised to Login because your Password is not correct",
+      });
+    }
+    res.status(200).json({
+      message: "You Are Successfully LoggedIn",
+      user,
+    });
+  } catch (error) {
+    res.status(400).json({
       message: "Something Went Wrong",
       error: error.message,
     });

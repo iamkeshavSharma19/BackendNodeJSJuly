@@ -22,3 +22,5 @@ connectDB()
   .catch((err) => {
     console.log("Database connection cannot be established");
   });
+
+  
