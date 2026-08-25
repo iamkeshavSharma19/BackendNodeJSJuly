@@ -4,12 +4,15 @@ import express from "express";
 import { connectDB } from "./config/database.js";
 import { User } from "./models/user.js";
 import { validateSignUpData } from "./utils/validation.js";
+import cookieParser from "cookie-parser";
+import { userAuth } from "./middlewares/auth.js";
 
 const PORT = process.env.PORT || 9999;
 const app = express();
 
 //?Our middleware will now be activated for all the routes.
 app.use(express.json());
+app.use(cookieParser());
 
 //?Diving Deep Into The API's
 //?SignUp API
@@ -82,7 +85,7 @@ app.post("/login", async (req, res) => {
       });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await user.validatePassword(password);
 
     if (!isPasswordValid) {
       return res.status(401).json({
@@ -90,12 +93,51 @@ app.post("/login", async (req, res) => {
           "You are not authorised to Login because your Password is not correct",
       });
     }
+    //?Step 1 ==> Creating The json Web Token.
+    const token = await user.getJWT();
+
+    //?Step 2 ==> Add The token to the cookie and the send the response back to the user
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 8 * 3600000),
+    });
+
     res.status(200).json({
       message: "You Are Successfully LoggedIn",
       user,
     });
   } catch (error) {
     res.status(400).json({
+      message: "Something Went Wrong",
+      error: error.message,
+    });
+  }
+});
+
+//!Profile API
+app.get("/profile", userAuth, async (req, res) => {
+  try {
+    const user = req.user;
+    res.status(200).json({
+      message: `${user}'s Profile is fetched Successfully `,
+      userProfile: user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something Went Wrong",
+      error: error.message,
+    });
+  }
+});
+
+//?ConnectionRequest API
+app.post("/sendConnectionRequest", userAuth, async (req, res) => {
+  try {
+    const user = req.user;
+    res.status(200).json({
+      message: `${user} has sent the connection request`,
+    });
+  } catch (error) {
+    res.status(500).json({
       message: "Something Went Wrong",
       error: error.message,
     });
