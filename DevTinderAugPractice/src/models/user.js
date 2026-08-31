@@ -55,6 +55,10 @@ const userSchema = new mongoose.Schema(
           throw new Error("Invalid Email Address");
         }
       },
+      enum: {
+        values: ["male", "female", "others"],
+        message: `{VALUE} is not a valid gender type`,
+      },
     },
 
     photoUrl: {
