@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const userSchema = mongoose.Schema(
   {
@@ -37,7 +39,7 @@ const userSchema = mongoose.Schema(
       type: String,
       maxLength: [254, "emailId should not exceed 20 characters length"],
       validate(value) {
-        if (validator.isEmail(value)) {
+        if (!validator.isEmail(value)) {
           throw new Error("Please enter a valid EmailId");
         }
       },
@@ -91,5 +93,19 @@ const userSchema = mongoose.Schema(
     timeStamps: true,
   },
 );
+
+userSchema.methods.validatePassword = async function (password) {
+  const user = this;
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  return isPasswordValid;
+};
+
+userSchema.methods.getJWT = function () {
+  const user = this;
+  const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "1d",
+  });
+  return token;
+};
 
 export const User = mongoose.model("User", userSchema);
