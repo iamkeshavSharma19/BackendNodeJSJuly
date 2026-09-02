@@ -9,6 +9,7 @@ import { userAuth } from "./middlewares/auth.js";
 import authRouter from "./routes/auth.js";
 import profileRouter from "./routes/profile.js";
 import requestRouter from "./routes/request.js";
+import userRouter from "./routes/user.js";
 
 const PORT = process.env.PORT || 9999;
 const app = express();
@@ -19,6 +20,7 @@ app.use(cookieParser());
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
+app.use("/", userRouter);
 
 //?Diving Deep Into The API's
 //?SignUp API
