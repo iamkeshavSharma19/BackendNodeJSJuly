@@ -11,11 +11,11 @@ const Profile = () => {
     }
   }, [user, navigate]);
 
-  
   if (!user) {
     return null;
   }
-
+  //?This profile form should give me a form where I can edit my Data
+  
   return <div>Profile</div>;
 };
 
