@@ -26,9 +26,9 @@ const Navbar = () => {
         {/* Desktop Nav Links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium">
           <NavItem>About</NavItem>
-          <NavItem>Pair Requests</NavItem>
+          <Link to="/profile">Profile</Link>
 
-          <NavItem>Community</NavItem>
+          <Link to="/feed">Feed</Link>
         </div>
 
         {/* Desktop Action Buttons */}
@@ -50,10 +50,10 @@ const Navbar = () => {
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
               >
                 <li>
-                  <a className="justify-between">
+                  <Link to="/profile" className="justify-between">
                     Profile
                     <span className="badge">New</span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a>Settings</a>

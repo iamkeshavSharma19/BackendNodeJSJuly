@@ -1,6 +1,19 @@
-import React from "react";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Feed = () => {
+  const user = useSelector((store) => store.user);
+  
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
+  if (!user) {
+    return null;
+  }
   return (
     <div>
       <h1 className="text-white">Feed Of The User</h1>

@@ -25,3 +25,8 @@
 - Login and see if your data is coming properly in the store
 - Navbar should update as soon as the user Logs In
 - Refactor our code to add constants file + create a components folder.
+
+# EP-17
+
+- You should not be able to access other routes without login
+- If token is not present, redirect user to login page
