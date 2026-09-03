@@ -3,11 +3,31 @@ import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { Brain, Flame, Rocket, Search, UserPlus } from "lucide-react";
 import { NavItem } from "./NavItem";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
+import { removeUser } from "../utils/userSlice";
 
 const Navbar = () => {
   //?from fetching the data from our Redux Store Use the useSelector Hook.
   const user = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        BASE_URL + "/logout",
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+      //?Also clearing the loggedIn User from the redux Store.
+      dispatch(removeUser());
+    } catch (error) {
+      //!Error Logic maybe redirect to Error page
+    }
+  };
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-slate-800/50 bg-[#020817]/90 backdrop-blur-sm">
@@ -59,7 +79,7 @@ const Navbar = () => {
                   <a>Settings</a>
                 </li>
                 <li>
-                  <a>Logout</a>
+                  <a onClick={handleLogout}>Logout</a>
                 </li>
               </ul>
             </div>

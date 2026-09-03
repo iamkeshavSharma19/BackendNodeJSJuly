@@ -10,9 +10,9 @@ export default function Login() {
   const [emailId, setEmailId] = useState("Randy@gmail.com");
 
   const [password, setPassword] = useState("Randy@2468");
+  const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  
 
   //?After successful LoggingIn, we will navigate our user to the feed section
   const navigate = useNavigate();
@@ -35,7 +35,8 @@ export default function Login() {
       dispatch(addUser(res.data.user));
       navigate("/feed");
     } catch (error) {
-      console.log(error);
+      setErrorMessage(error?.response?.data || "Something Went Wrong");
+      console.log(error.response);
     }
   };
 
@@ -83,6 +84,7 @@ export default function Login() {
               />
               <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 cursor-pointer"></div>
             </div>
+            <p className="text-red-500">{errorMessage}</p>
 
             <button
               type="button"
