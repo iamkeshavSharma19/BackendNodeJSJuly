@@ -1,4 +1,5 @@
-import React from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./components/Navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Body from "./components/Body";
@@ -24,6 +25,7 @@ const App = () => {
             </Route>
           </Routes>
         </BrowserRouter>
+         <ToastContainer position="top-right" autoClose={3000} theme="colored" />
       </Provider>
     </>
   );

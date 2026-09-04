@@ -1,15 +1,28 @@
 import React from "react";
 import { X, Heart, Code2, MapPin } from "lucide-react";
 
-export default function UserCard({ user }) {
+export default function UserCard({ user, isEdit = false }) {
+  console.log(user);
   if (!user) return null;
 
   const { firstName, lastName, photoUrl, about, age, gender } = user;
 
   return (
-    <div className="relative z-10 w-full max-w-sm sm:max-w-md bg-[#090d1f]/90 border border-slate-800/80 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-xl flex flex-col justify-between my-auto mt-20">
+    <div
+      className={
+        isEdit
+          ? "relative z-10 w-full max-w-sm sm:max-w-md bg-[#090d1f]/90 border border-slate-800/80 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-xl flex flex-col justify-between my-auto h-[95vh]"
+          : "relative z-10 w-full max-w-sm sm:max-w-md bg-[#090d1f]/90 border border-slate-800/80 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-xl flex flex-col justify-between my-auto mt-20"
+      }
+    >
       {/* Top Image Container */}
-      <div className="relative h-72 sm:h-80 w-full overflow-hidden bg-slate-950">
+      <div
+        className={
+          isEdit
+            ? "relative h-96 sm:h-105 w-full overflow-hidden bg-slate-950"
+            : "relative h-72 sm:h-80 w-full overflow-hidden bg-slate-950"
+        }
+      >
         <img
           src={photoUrl}
           alt={`${firstName} ${lastName}`}
@@ -19,23 +32,22 @@ export default function UserCard({ user }) {
         <div className="absolute inset-0 bg-linear-to-t from-[#090d1f] via-transparent to-transparent opacity-90" />
 
         {/* Floating Badges */}
-        <div className="absolute top-4 right-4 bg-slate-900/80 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-purple-400 border border-purple-500/30">
-          Developer
-        </div>
       </div>
 
       {/* Content Section */}
       <div className="p-6 sm:p-7 space-y-4 -mt-6 relative z-10">
         {/* Name & Age */}
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-wide font-['JetBrains_Mono'] items-center gap-2">
+          <h2 className="text-2xl font-bold text-white tracking-wide font-['JetBrains_Mono'] items-center gap-2 mt-4">
             {firstName} {lastName}
-            {age && gender && (
+            {age && (
+              <p className="text-slate-400 text-lg font-normal mt-1">{age}</p>
+            )}
+            {gender && (
               <p className="text-slate-400 text-lg font-normal mt-1">
-                {age}, {gender}
+                {gender}
               </p>
             )}
-            
           </h2>
         </div>
 

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import EditProfile from "./EditProfile";
 
 const Profile = () => {
   const user = useSelector((store) => store.user);
@@ -16,7 +17,11 @@ const Profile = () => {
   }
   //?This profile form should give me a form where I can edit my Data
 
-  return <div>Profile</div>;
+  return (
+    <div>
+      <EditProfile user={user} isEdit={true} />
+    </div>
+  );
 };
 
 export default Profile;
