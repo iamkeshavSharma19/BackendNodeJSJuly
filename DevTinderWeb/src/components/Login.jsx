@@ -12,7 +12,7 @@ export default function Login() {
   const [password, setPassword] = useState("Randy@2468");
   const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
+  const user = useSelector((store) => store.user);
 
   //?After successful LoggingIn, we will navigate our user to the feed section
   const navigate = useNavigate();
