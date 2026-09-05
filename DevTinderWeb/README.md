@@ -33,3 +33,9 @@
 - Logout Feature
 - Get the feed and add the feed in the store
 - Profile
+- EditProfile Feature.
+- Show Toast Message on the save of profile.
+- See all my Connections.
+
+
+# EP-18

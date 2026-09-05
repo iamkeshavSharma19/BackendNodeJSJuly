@@ -82,7 +82,7 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
 
     res.status(200).json({
       message: "Connection requests found successfully",
-      connectionRequests: data,
+      connections: data,
     });
   } catch (error) {
     res.status(500).json({

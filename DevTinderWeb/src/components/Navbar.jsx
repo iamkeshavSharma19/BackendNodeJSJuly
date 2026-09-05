@@ -1,17 +1,21 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import logo from "../assets/logo.png";
+
 import { Brain, Flame, Rocket, Search, UserPlus } from "lucide-react";
 import { NavItem } from "./NavItem";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
+import { removeFeed } from "../utils/feedSlice";
+import { removeConnections } from "../utils/connectionSlice";
+import { removeRequests } from "../utils/requestSlice";
 
 const Navbar = () => {
   //?from fetching the data from our Redux Store Use the useSelector Hook.
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -24,6 +28,15 @@ const Navbar = () => {
       );
       //?Also clearing the loggedIn User from the redux Store.
       dispatch(removeUser());
+      //?Also clearing the feed of the loggedIn User from the redux Store
+      dispatch(removeFeed());
+      //?Also clearing the connections of the loggedIn User from the redux store.
+      dispatch(removeConnections());
+      //?Also clearing the pending requests of the LoggedIn User from the redux store
+      dispatch;
+      //?Navigating the User back to the Login page
+      dispatch(removeRequests());
+      navigate("/login");
     } catch (error) {
       //!Error Logic maybe redirect to Error page
     }
@@ -76,7 +89,10 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li>
-                  <a>Settings</a>
+                  <Link to="/connections">Connections</Link>
+                </li>
+                <li>
+                  <Link to="/requests">Requests</Link>
                 </li>
                 <li>
                   <a onClick={handleLogout}>Logout</a>
