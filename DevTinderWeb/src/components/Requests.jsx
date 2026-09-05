@@ -1,12 +1,28 @@
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { addRequests } from "../utils/requestSlice";
+import { addRequests, removeRequests } from "../utils/requestSlice";
 import { BASE_URL } from "../utils/constants";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Requests = () => {
   const dispatch = useDispatch();
   const requests = useSelector((store) => store.requests);
+
+  const reviewRequest = async (status, _id) => {
+    try {
+      const res = await axios.post(
+        BASE_URL + "/request/review" + "/" + status + "/" + _id,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+      dispatch(removeRequests(_id));
+    } catch (error) {
+      console.log(error?.response?.data);
+    }
+  };
+
   const fetchRequests = async () => {
     try {
       if (requests) return;
@@ -113,7 +129,10 @@ const Requests = () => {
                       {/* Scaled Button */}
                       <div className="flex items-center justify-center sm:justify-start gap-3 self-center sm:self-auto shrink-0">
                         {/* Reject Button */}
-                        <button className="px-5 py-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 hover:bg-rose-600 hover:border-rose-500 text-rose-400 hover:text-white text-sm font-semibold font-['JetBrains_Mono'] transition-all duration-200 cursor-pointer shadow-lg shadow-rose-950/20 active:scale-95 flex items-center gap-2">
+                        <button
+                          className="px-5 py-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 hover:bg-rose-600 hover:border-rose-500 text-rose-400 hover:text-white text-sm font-semibold font-['JetBrains_Mono'] transition-all duration-200 cursor-pointer shadow-lg shadow-rose-950/20 active:scale-95 flex items-center gap-2"
+                          onClick={() => reviewRequest("rejected", request._id)}
+                        >
                           <svg
                             className="w-4 h-4"
                             fill="none"
@@ -131,7 +150,10 @@ const Requests = () => {
                         </button>
 
                         {/* Accept Button */}
-                        <button className="px-5 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-600 hover:border-emerald-500 text-emerald-400 hover:text-white text-sm font-semibold font-['JetBrains_Mono'] transition-all duration-200 cursor-pointer shadow-lg shadow-emerald-950/20 active:scale-95 flex items-center gap-2">
+                        <button
+                          className="px-5 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-600 hover:border-emerald-500 text-emerald-400 hover:text-white text-sm font-semibold font-['JetBrains_Mono'] transition-all duration-200 cursor-pointer shadow-lg shadow-emerald-950/20 active:scale-95 flex items-center gap-2"
+                          onClick={() => reviewRequest("accepted", request._id)}
+                        >
                           <svg
                             className="w-4 h-4"
                             fill="none"

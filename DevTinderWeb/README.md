@@ -35,7 +35,15 @@
 - Profile
 - EditProfile Feature.
 - Show Toast Message on the save of profile.
-- See all my Connections.
-
 
 # EP-18
+
+- New Page - See all my Connections.
+- New Page - See all my Connection Requests.
+- Feature - Accept/Reject Connection Request.
+
+Remaining:
+
+- Send/ignore the user card from feed
+- Signup New User
+- E2E Testing
