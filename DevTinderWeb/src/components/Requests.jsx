@@ -111,9 +111,43 @@ const Requests = () => {
                       </h3>
 
                       {/* Scaled Button */}
-                      <button className="self-center sm:self-auto px-6 py-2.5 rounded-xl bg-indigo-600/20 border border-indigo-500/30 hover:bg-indigo-600 hover:border-indigo-500 text-indigo-300 hover:text-white text-sm font-semibold font-['JetBrains_Mono'] transition-all duration-200 cursor-pointer">
-                        Chat
-                      </button>
+                      <div className="flex items-center justify-center sm:justify-start gap-3 self-center sm:self-auto shrink-0">
+                        {/* Reject Button */}
+                        <button className="px-5 py-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 hover:bg-rose-600 hover:border-rose-500 text-rose-400 hover:text-white text-sm font-semibold font-['JetBrains_Mono'] transition-all duration-200 cursor-pointer shadow-lg shadow-rose-950/20 active:scale-95 flex items-center gap-2">
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                          <span>Reject</span>
+                        </button>
+
+                        {/* Accept Button */}
+                        <button className="px-5 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-600 hover:border-emerald-500 text-emerald-400 hover:text-white text-sm font-semibold font-['JetBrains_Mono'] transition-all duration-200 cursor-pointer shadow-lg shadow-emerald-950/20 active:scale-95 flex items-center gap-2">
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                          <span>Accept</span>
+                        </button>
+                      </div>
                     </div>
 
                     {/* Age & Gender Tag */}
