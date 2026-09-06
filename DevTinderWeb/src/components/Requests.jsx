@@ -25,7 +25,7 @@ const Requests = () => {
 
   const fetchRequests = async () => {
     try {
-      if (requests) return;
+      // if (requests) return;
       const res = await axios.get(BASE_URL + "/user/requests/received", {
         withCredentials: true,
       });

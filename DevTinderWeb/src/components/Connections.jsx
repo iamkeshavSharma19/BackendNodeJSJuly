@@ -10,7 +10,7 @@ const Connections = () => {
 
   const fetchConnections = async () => {
     try {
-      if (connections) return;
+      // if (connections) return;
       const res = await axios.get(BASE_URL + "/user/connections", {
         withCredentials: true,
       });

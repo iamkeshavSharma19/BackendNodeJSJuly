@@ -9,7 +9,7 @@ import { BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
 import { removeFeed } from "../utils/feedSlice";
 import { removeConnections } from "../utils/connectionSlice";
-import { removeRequests } from "../utils/requestSlice";
+import { clearAllRequests, removeRequests } from "../utils/requestSlice";
 
 const Navbar = () => {
   //?from fetching the data from our Redux Store Use the useSelector Hook.
@@ -35,7 +35,7 @@ const Navbar = () => {
       //?Also clearing the pending requests of the LoggedIn User from the redux store
       dispatch;
       //?Navigating the User back to the Login page
-      dispatch(removeRequests());
+      dispatch(clearAllRequests());
       navigate("/login");
     } catch (error) {
       //!Error Logic maybe redirect to Error page
