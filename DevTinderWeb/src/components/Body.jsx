@@ -11,6 +11,7 @@ const Body = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userData = useSelector((store) => store.user);
+  console.log(userData)
   const [isLoading, setIsLoading] = useState(true);
   const fetchUser = async () => {
     if (userData) {
@@ -23,8 +24,8 @@ const Body = () => {
      
       dispatch(addUser(res.data));
     } catch (error) {
-      console.log(error);
-      console.log(error.status);
+      
+      console.log(error.response);
     } finally {
       setIsLoading(false);
     }
