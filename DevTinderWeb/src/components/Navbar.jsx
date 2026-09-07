@@ -107,7 +107,7 @@ const Navbar = () => {
             </button>
             <button className="text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 bg-slate-900 border border-slate-700 hover:bg-slate-800 rounded-lg flex items-center gap-1.5 sm:gap-2 text-slate-100 transition-all shadow-sm cursor-pointer whitespace-nowrap">
               <UserPlus className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" />
-              <span>Create Profile</span>
+              <Link to="signup">Create Profile</Link>
             </button>
           </div>
         )}

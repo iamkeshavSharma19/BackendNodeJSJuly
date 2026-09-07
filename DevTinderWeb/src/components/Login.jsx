@@ -3,7 +3,8 @@ import loginBg from "../assets/loginBg.jpg";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 import { BASE_URL } from "../utils/constants";
 
 export default function Login() {
@@ -32,7 +33,7 @@ export default function Login() {
       );
       //?Once we got the loggedIn user,we will add this loggedInUser to our Redux Store.
 
-      dispatch(addUser(res.data.user));
+      dispatch(addUser(res?.data?.user));
       navigate("/feed");
     } catch (error) {
       setErrorMessage(error?.response?.data || "Something Went Wrong");
@@ -97,9 +98,9 @@ export default function Login() {
 
           <div className="pt-2 text-center text-sm text-slate-400">
             Not Having an Account?{" "}
-            <a href="#" className="text-purple-400 hover:underline">
+            <Link to="/signup" className="text-purple-400 hover:underline">
               Register here
-            </a>
+            </Link>
           </div>
         </div>
       </div>

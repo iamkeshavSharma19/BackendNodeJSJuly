@@ -36,7 +36,7 @@ const EditProfile = ({ user }) => {
       dispatch(addUser(res?.data?.data));
       toast.success("Profile Updated Successfully");
     } catch (error) {
-      setError(error?.response?.data);
+      setError(error?.response?.data || "Something Went Wrong");
       toast.error("Error in Editing The Profile");
     }
   };
