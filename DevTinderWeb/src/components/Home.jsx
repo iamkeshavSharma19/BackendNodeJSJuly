@@ -8,6 +8,7 @@ import FeaturesGridSection from "./FeaturesGridSection";
 import TestimonialsSection from "./TestimonialsSection";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
@@ -65,10 +66,10 @@ export default function Home() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
-            <button className="px-8 py-4 rounded-xl text-lg font-bold bg-linear-to-r from-blue-600 via-indigo-500 to-purple-500 hover:opacity-90 text-white flex items-center justify-center gap-2.5 shadow-lg shadow-indigo-500/25 transition-all cursor-pointer">
+            <Link to="/feed" className="px-8 py-4 rounded-xl text-lg font-bold bg-linear-to-r from-blue-600 via-indigo-500 to-purple-500 hover:opacity-90 text-white flex items-center justify-center gap-2.5 shadow-lg shadow-indigo-500/25 transition-all cursor-pointer">
               Find Your Matches
               <Search className="w-5 h-5" />
-            </button>
+            </Link>
 
             <button className="px-8 py-4 rounded-xl text-lg font-bold bg-slate-900/60 hover:bg-slate-800/80 text-slate-100 border border-slate-700 flex items-center justify-center gap-2.5 transition-all cursor-pointer">
               🚀 View Community Projects

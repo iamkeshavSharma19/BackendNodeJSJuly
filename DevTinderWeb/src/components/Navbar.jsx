@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
-import { removeFeed } from "../utils/feedSlice";
+import { clearFeed } from "../utils/feedSlice";
 import { removeConnections } from "../utils/connectionSlice";
 import { clearAllRequests, removeRequests } from "../utils/requestSlice";
 
@@ -29,7 +29,7 @@ const Navbar = () => {
       //?Also clearing the loggedIn User from the redux Store.
       dispatch(removeUser());
       //?Also clearing the feed of the loggedIn User from the redux Store
-      dispatch(removeFeed());
+      dispatch(clearFeed());
       //?Also clearing the connections of the loggedIn User from the redux store.
       dispatch(removeConnections());
       //?Also clearing the pending requests of the LoggedIn User from the redux store

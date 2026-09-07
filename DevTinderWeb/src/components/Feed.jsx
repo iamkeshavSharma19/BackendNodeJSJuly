@@ -7,6 +7,7 @@ import { addFeed } from "../utils/feedSlice";
 import UserCard from "./UserCard";
 import loginBg from "../assets/loginBg.jpg";
 
+
 const Feed = () => {
   const user = useSelector((store) => store.user);
   const feed = useSelector((store) => store.feed);

@@ -42,6 +42,8 @@
 - New Page - See all my Connection Requests.
 - Feature - Accept/Reject Connection Request.
 
+# EP-19
+
 Remaining:
 
 - Send/ignore the user card from feed

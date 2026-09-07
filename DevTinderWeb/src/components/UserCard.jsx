@@ -1,11 +1,31 @@
-import React from "react";
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
+import { removeUserFeed } from "../utils/feedSlice";
+import { useDispatch } from "react-redux";
 import { X, Heart, Code2, MapPin } from "lucide-react";
 
 export default function UserCard({ user, isEdit = false }) {
   console.log(user);
   if (!user) return null;
+  const dispatch = useDispatch();
 
-  const { firstName, lastName, photoUrl, about, age, gender } = user;
+  const { firstName, lastName, photoUrl, about, age, gender, _id } = user;
+
+  const handleSendRequest = async (status, userId) => {
+    try {
+      const res = await axios.post(
+        BASE_URL + "/request/send/" + status + "/" + userId,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+
+      dispatch(removeUserFeed(userId));
+    } catch (error) {
+      console.log(error?.response?.data);
+    }
+  };
 
   return (
     <div
@@ -62,6 +82,7 @@ export default function UserCard({ user, isEdit = false }) {
           <button
             type="button"
             className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-900/80 hover:bg-rose-950/40 border border-slate-700/60 hover:border-rose-500/50 text-slate-300 hover:text-rose-400 font-semibold text-sm transition-all duration-200 cursor-pointer shadow-lg active:scale-95"
+            onClick={() => handleSendRequest("ignored", _id)}
           >
             <X className="w-4 h-4" />
             Ignore
@@ -70,6 +91,7 @@ export default function UserCard({ user, isEdit = false }) {
           <button
             type="button"
             className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 hover:opacity-95 text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-lg shadow-indigo-500/25 active:scale-95"
+            onClick={() => handleSendRequest("interested", _id)}
           >
             <Heart className="w-4 h-4 fill-white" />
             Interested
