@@ -2,6 +2,7 @@ import { validateSignUpData } from "../utils/validations.js";
 import { User } from "../models/user.model.js";
 import bcrypt from "bcrypt";
 
+
 export const handleUserSignUp = async (req, res) => {
   try {
     validateSignUpData(req);
