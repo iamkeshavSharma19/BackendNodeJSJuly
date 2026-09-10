@@ -81,3 +81,13 @@ export const handleViewUserConnections = async (req, res) => {
   }
 };
 
+export const handleUserFeed = async (req, res) => {
+  try {
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: "Something Went Wrong",
+      error: error.message,
+    });
+  }
+};

@@ -16,4 +16,6 @@ userRouter.get(
   userController.handleViewUserConnections,
 );
 
+userRouter.get("/feed", userAuth, userController.handleUserFeed);
+
 export default userRouter;
