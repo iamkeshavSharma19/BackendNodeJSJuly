@@ -28,6 +28,19 @@ export const handleProfileEdit = async (req, res) => {
       });
     }
 
+    const userToBeEdited = req.user;
+
+    Object.keys(editData).forEach(
+      (key) => (userToBeEdited[key] = editData[key]),
+    );
+
+    await userToBeEdited.save();
+
+    res.status(201).json({
+      success: true,
+      message: "User's profile edited Successfully",
+      editeduser: userToBeEdited,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -35,6 +48,4 @@ export const handleProfileEdit = async (req, res) => {
       error: error.message,
     });
   }
-
-  
 };

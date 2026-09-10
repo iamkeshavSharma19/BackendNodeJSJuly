@@ -19,7 +19,6 @@ export const validateSignUpData = (req) => {
 };
 
 export const validateEditProfileData = (editData) => {
-  console.log(editData);
   const ALLOWED_EDIT_FIELDS = [
     "firstName",
     "lastName",
@@ -29,13 +28,9 @@ export const validateEditProfileData = (editData) => {
     "about",
   ];
 
-  console.log(Object.keys(editData));
-
   const isEditAllowed = Object.keys(editData).every((key) =>
     ALLOWED_EDIT_FIELDS.includes(key),
   );
-
-  console.log(isEditAllowed);
 
   return isEditAllowed;
 };

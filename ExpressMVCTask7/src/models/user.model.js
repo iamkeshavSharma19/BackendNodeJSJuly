@@ -72,7 +72,7 @@ const userSchema = mongoose.Schema(
     about: {
       type: String,
       trim: true,
-      maxLength: [50, "Bio is exceeding the minimum allowed length"],
+      maxLength: [100, "Bio is exceeding the minimum allowed length"],
       default: "This is the default about the user",
     },
 
