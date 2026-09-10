@@ -17,3 +17,25 @@ export const validateSignUpData = (req) => {
     throw new Error("Please enter a strong password");
   }
 };
+
+export const validateEditProfileData = (editData) => {
+  console.log(editData);
+  const ALLOWED_EDIT_FIELDS = [
+    "firstName",
+    "lastName",
+    "age",
+    "gender",
+    "photoUrl",
+    "about",
+  ];
+
+  console.log(Object.keys(editData));
+
+  const isEditAllowed = Object.keys(editData).every((key) =>
+    ALLOWED_EDIT_FIELDS.includes(key),
+  );
+
+  console.log(isEditAllowed);
+
+  return isEditAllowed;
+};

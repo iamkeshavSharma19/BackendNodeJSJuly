@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema(
     firstName: {
       type: String,
       minLength: [3, "FirstName should lie between 3 to 20 characters"],
-      maxLength: [20, "FirstName should lie between 3 to 20 characters"],
+      maxLength: [50, "FirstName should lie between 3 to 20 characters"],
       trim: true,
       required: [true, "It is mandatory to provide First Name"],
       match: [/^[A-Za-z]+$/, "firstName should contain only alphabets"],
@@ -17,7 +17,7 @@ const userSchema = mongoose.Schema(
     lastName: {
       type: String,
       minLength: [3, "FirstName should lie between 3 to 20 characters"],
-      maxLength: [20, "FirstName should lie between 3 to 20 characters"],
+      maxLength: [50, "FirstName should lie between 3 to 20 characters"],
       trim: true,
       required: [true, "It is mandatory to provide First Name"],
       match: [/^[A-Za-z]+$/, "lastName should only contain alphabets"],

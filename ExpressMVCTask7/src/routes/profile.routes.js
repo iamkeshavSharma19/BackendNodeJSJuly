@@ -10,4 +10,10 @@ profileRouter.get(
   profileController.handleProfileView,
 );
 
+profileRouter.patch(
+  "/profile/edit",
+  userAuth,
+  profileController.handleProfileEdit,
+);
+
 export default profileRouter;
