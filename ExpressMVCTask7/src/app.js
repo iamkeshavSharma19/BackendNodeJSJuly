@@ -5,6 +5,7 @@ import { connectDB } from "./config/database.js";
 import authRouter from "./routes/auth.routes.js";
 import profileRouter from "./routes/profile.routes.js";
 import requestRouter from "./routes/request.routes.js";
+import userRouter from "./routes/user.routes.js";
 import cookieParser from "cookie-parser";
 
 const PORT = process.env.PORT || 19;
@@ -17,6 +18,8 @@ app.use(cookieParser());
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
+app.use("/", userRouter);
+
 
 connectDB()
   .then(() => {
