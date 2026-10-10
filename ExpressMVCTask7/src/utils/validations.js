@@ -9,7 +9,7 @@ export const validateSignUpData = (req) => {
     );
   } else if (firstName.length < 3 || firstName.length > 20) {
     throw new Error("FirstName should lie between 3 to 20 characters");
-  } else if (lastName.length < 3 || lastName.length > 20) {
+  } else if (lastName.length  < 3 || lastName.length > 20) {
     throw new Error("LastName should lie between 3 to 20 characters");
   } else if (!validator.isEmail(emailId)) {
     throw new Error("Please enter a valid emailId");
